@@ -37,7 +37,7 @@ export const loginUserController = async (req, res) => {
 
 export const logoutUserController = async (req, res) => {
   if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
+    await logoutUser(req.cookies.sessionId, req.cookies.refreshToken);
   }
 
   res.clearCookie('sessionId');
@@ -58,6 +58,13 @@ const setupSession = (res, session) => {
 };
 
 export const refreshUserSessionController = async (req, res) => {
+  const { sessionId, refreshToken } = req.cookies;
+  if (!sessionId || !refreshToken) {
+    return res.status(400).json({
+      status: 400,
+      message: 'Session not found',
+    });
+  }
   const session = await refreshUserSession({
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
