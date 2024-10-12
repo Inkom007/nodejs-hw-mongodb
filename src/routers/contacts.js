@@ -26,7 +26,7 @@ router.post(
   ctrlWrapper(createContactController),
 );
 router.patch(
-  ':contactId',
+  '/:contactId',
   isValidId,
   validateBody(updateContactSchema),
   ctrlWrapper(patchStudentController),
